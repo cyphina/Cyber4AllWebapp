@@ -2,6 +2,7 @@ import { MongoDriverFactory } from "./MongoConnectorFactory";
 import { MongoDriver } from './MongoConnector';
 import * as bodyParser from 'body-parser'
 import * as express from "../node_modules/express/lib/express"
+import * as path from "path"
 
 var dbController = MongoDriverFactory.build()
   .then(async (datastore) => {
@@ -10,18 +11,27 @@ var dbController = MongoDriverFactory.build()
     const app = express();
 
     app.use(bodyParser.json())
+    app.use(function(req, res, next) {
+        res.header("Access-Control-Allow-Origin", "*");
+        res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+        next();
+      });
 
-    app.get('/', async (req, res) => {
+    app.use('/', express.static(path.join(__dirname, '../public'), {redirect: false}));
+
+    app.get('/listTasks', async (req, res) => {
 
       let taskList = []
       let sortObject = {}
-      let sortFields = JSON.parse(req.query.sortFields) || []
+      if(req.query.sortFields && req.query.sortDirection)
+      {
+        let sortFields = JSON.parse(req.query.sortFields) || []
 
-      try {
-        for (let i = 0; i < sortFields.length; ++i) {
-          if (sortFields[i]) {
-            sortObject[sortFields[i]] = parseInt(req.query.sortDirection) || -1
-          }
+        try {
+            for (let i = 0; i < sortFields.length; ++i) {
+                if (sortFields[i]) {
+                sortObject[sortFields[i]] = parseInt(req.query.sortDirection) || -1
+            }
         }
 
         taskList = await datastore.listTasks(sortObject)
@@ -30,6 +40,17 @@ var dbController = MongoDriverFactory.build()
       catch (e) {
         console.log(e)
       }
+    }
+    else
+    {
+        try {
+            taskList = await datastore.listTasks(sortObject)
+            res.status(200).send(taskList)
+        }
+        catch(e) {
+            console.log(e)
+        }
+    }
     })
 
 //As a user, I should be able to create a task

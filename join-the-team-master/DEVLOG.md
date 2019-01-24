@@ -18,4 +18,6 @@
     -Ran into a few bugs
         -Ran into a small issue with the controller update function.  The parameter passed to updateOne() inside updateTask() should be an object without an id field.  
         -Other bugs were just my own mistakes like writing the wrong ids when testing out my API
-    
+5. Followed the tutorial on AngularJS
+6. Problem with cross-origin resource sharing
+7. Issue sending an array in the get request to sort 

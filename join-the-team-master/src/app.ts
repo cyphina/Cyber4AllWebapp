@@ -13,6 +13,7 @@ var dbController = MongoDriverFactory.build()
     app.use(bodyParser.json())
     app.use(function(req, res, next) {
         res.header("Access-Control-Allow-Origin", "*");
+        res.header("Access-Control-Allow-Methods", "GET, PUT, POST, DELETE");
         res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
         next();
       });
@@ -25,16 +26,18 @@ var dbController = MongoDriverFactory.build()
       let sortObject = {}
       if(req.query.sortFields && req.query.sortDirection)
       {
-        let sortFields = JSON.parse(req.query.sortFields) || []
-
         try {
+            let sortFields = JSON.parse(req.query.sortFields) || []
+
             for (let i = 0; i < sortFields.length; ++i) {
                 if (sortFields[i]) {
                 sortObject[sortFields[i]] = parseInt(req.query.sortDirection) || -1
+                
             }
         }
-
+        console.log(sortObject)
         taskList = await datastore.listTasks(sortObject)
+        
         res.status(200).send(taskList)
       }
       catch (e) {
@@ -56,8 +59,9 @@ var dbController = MongoDriverFactory.build()
 //As a user, I should be able to create a task
 app.post('/createTask', async (req, res) => {
   try {
-    let createRes = await datastore.createTask({ text: req.body.text, completed: req.body.completed, date: new Date() })
-    res.send("Successful task creation")
+    let newTask = { text: req.body.text, completed: req.body.completed, date: new Date() }
+    let createRes = await datastore.createTask(newTask)
+    res.send(newTask)
   }
   catch (e) {
     res.send("Failed to create task")
@@ -65,7 +69,7 @@ app.post('/createTask', async (req, res) => {
   }
 })
 
-//As a user, I should be able to create a task
+//As a user, I should be able to rename a task
 app.put('/renameTask', async (req, res) => {
   try {
     let foundTask = await datastore.readTask(req.body._id)
@@ -88,13 +92,13 @@ app.put('/completeTask', async (req, res) => {
     let foundTask = await datastore.readTask(req.body._id)
     if (foundTask) {
       let updateRes = await datastore.updateTask(req.body._id, { completed: req.body.completed })
-      res.send('Update with put!')
+      res.send(foundTask)
     }
     else
       throw "No task with ID " + req.body._id + " found."
   }
   catch (e) {
-    res.send('Update failed!')
+    res.send({})
     console.log(e)
   }
 })
@@ -105,13 +109,13 @@ app.delete('/deleteTask', async (req, res) => {
     let foundTask = await datastore.readTask(req.query._id)
     if (foundTask) {
       let deleteRes = datastore.deleteTask(req.query._id)
-      res.send('Deleted task with id ' + req.query._id + ' successfully!')
+      res.send(foundTask)
     }
     else
       throw "No task with ID " + req.query_id + " found."
   }
   catch (e) { //Invalid kind of ID (not convertible to ObjectID)
-    res.send('Delete failed for id + ' + req.query._id + '!')
+    res.send({})
     console.log(e)
   }
 })
@@ -134,13 +138,13 @@ app.delete('/deleteCategory', async (req, res) => {
     let foundTask = await datastore.readCategory(req.query._id)
     if (foundTask) {
       let deleteRes = datastore.deleteCategory(req.query._id)
-      res.send('Deleted category with id ' + req.query._id + ' successfully!')
+      res.send(foundTask)
     }
     else
       throw "No category with ID " + req.query_id + " found."
   }
   catch (e) { //Invalid kind of ID (not convertible to ObjectID)
-    res.send('Delete failed for category with id + ' + req.query._id + '!')
+    res.send({})
     console.log(e)
   }
 })

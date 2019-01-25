@@ -19,15 +19,26 @@ var dbController = MongoDriverFactory.build()
         });
 
         app.use('/', express.static(path.join(__dirname, '../public'), { redirect: false }));
-        
+
         app.get('/listTask', async (req, res) => {
-            try{
-                
+            if (req.query._id) {
+                try {
+                    let id = req.query._id
+                    let task = await datastore.readTask(req.query._id)
+                    if (task) {
+                        res.send(task)
+                    }
+                    else
+                        throw ("No objects found with ID " + req.query._id)
+                }
+                catch (e) {
+                    res.send({})
+                    console.log(e)
+                }
             }
-            catch(e)
-            {
-                res.status(404).send()
-                console.log(e)
+            else {
+                console.log("Empty _id field")
+                res.send({})
             }
         })
 
@@ -127,8 +138,8 @@ var dbController = MongoDriverFactory.build()
             }
         })
 
-        app.get('/getCategories', async( req, res) => {
-            try{
+        app.get('/getCategories', async (req, res) => {
+            try {
                 let categoryList = await datastore.listCategories()
                 res.send(categoryList)
             }
@@ -142,7 +153,7 @@ var dbController = MongoDriverFactory.build()
         app.post('/createCategory', async (req, res) => {
             try {
                 let createRes = await datastore.createCategory(req.body.name)
-                res.send({_id:createRes, name: req.body.name, tasks: []})
+                res.send({ _id: createRes, name: req.body.name, tasks: [] })
             }
             catch (e) {
                 res.send({})

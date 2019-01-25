@@ -135,11 +135,12 @@ export class MongoDriver {
    * Removes a list of existing tasks from an existing category
    *
    * @param {string} categoryId the id of the category from which to remove the tasks
-   * @param {string[]} taskList a list of task ids to add to the category
+   * @param {string[]} taskList a list of task ids to remove from the category
    * @memberof MongoDriver
    */
   async removeTasksFromCategory(categoryId: string, taskList: string[]) {
-    await this.categories.updateOne({ _id: new ObjectID(categoryId) }, { $pull: { tasks: { $each: taskList.map(taskId => new ObjectID(taskId)) } } });
+    let newTaskList = taskList.map(taskId => new ObjectID(taskId))
+    await this.categories.updateOne({ _id: new ObjectID(categoryId) }, { $pull: { tasks: { $in : newTaskList } } });
   }
 
   /**

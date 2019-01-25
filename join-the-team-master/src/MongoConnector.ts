@@ -63,11 +63,6 @@ export class MongoDriver {
     return tasks;
   }
 
-  async listTasksByID(idFilter = []) {
-    const tasks = await this.tasks.find({ _id : { $in: idFilter }})
-    return tasks;
-  }
-
   /**
    * Deletes a task
    *

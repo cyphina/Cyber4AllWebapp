@@ -30,7 +30,7 @@
 that could lead to this issue had to be some kind of formatting problem.
     -Fixed using JSON.stringify on the array object.  
 
-8. Ran into a lot of issues that were of my own negligance:
+8. Ran into a lot of issues that were of my own negligence:
     When programming the radiobutton, I passed in the wrong parameter to the function I was calling.  I thought I called the wrong DOM event and that (check) didn't work, so I kept looking up the right DOM event and testing out different methodologies to different problems I found online.
     I had a random comma in my html element and I got this weird error which I found various solutions for online.  I later found the extra comma.
     I had been trying to reference {{task.text}} from when I looped over the task objects in my category object, and I forgot that I only stored the ids in category not the actual tasks. 
@@ -43,3 +43,4 @@ that could lead to this issue had to be some kind of formatting problem.
 11. Finally I decided to fix everything up according to some tutorials I'm reading at the end.  I didn't follow any of the start-to-end tutorials during the process, but I'm reading them again now to see if there's a good way to organize the folder structure.  I'm also seeing in the tutorials that I should've probably organized my routes differently, like using some route parameters.  It's not to hard to implement so I can fix that myself now.
 
 Overall if I were to do this as real-world project I would probably ask to elaborate on the requirements at the start and improve the error checking.  I could also do this a lot faster since I know the steps now, although if I am going to be doing this more, I would read up on the technical details more.  I would probably and keep the integrity of the database in check by making sure if I deleted some task, I would also remove them in the categories referencing them.  
+

@@ -3,6 +3,7 @@ import { MongoDriver } from './MongoConnector';
 import * as bodyParser from 'body-parser'
 import * as express from "../node_modules/express/lib/express"
 import * as path from "path"
+import * as cors from "cors"
 
 var dbController = MongoDriverFactory.build()
     .then(async (datastore) => {
@@ -11,25 +12,31 @@ var dbController = MongoDriverFactory.build()
         const app = express();
 
         app.use(bodyParser.json())
-        app.use(function (req, res, next) {
-            res.header("Access-Control-Allow-Origin", "*");
-            res.header("Access-Control-Allow-Methods", "GET, PUT, POST, DELETE");
-            res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
-            next();
-        });
+        // app.use(function (req, res, next) {
+        //     res.header("Access-Control-Allow-Origin", "*");
+        //     res.header("Access-Control-Allow-Methods", "GET, PUT, POST, DELETE");
+        //     res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+        //     next();
+        // });
+
+        var corsOptions = {
+            origin: 'http://localhost:4200', //url for frontend
+            optionsSuccessState: 200
+        }
+        app.use(cors(corsOptions))
 
         app.use('/', express.static(path.join(__dirname, '../public'), { redirect: false }));
 
-        app.get('/listTask', async (req, res) => {
-            if (req.query._id) {
+        app.get('/listTask/:_id', async (req, res) => {
+            if (req.params._id) {
                 try {
                     let id = req.query._id
-                    let task = await datastore.readTask(req.query._id)
+                    let task = await datastore.readTask(req.params._id)
                     if (task) {
                         res.send(task)
                     }
                     else
-                        throw ("No objects found with ID " + req.query._id)
+                        throw ("No objects found with ID " + req.params._id)
                 }
                 catch (e) {
                     res.send({})

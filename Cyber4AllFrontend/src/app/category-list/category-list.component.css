@@ -1,0 +1,29 @@
+.mb1{
+    margin-bottom: 1rem; 
+}
+
+.mr1 {
+    margin-right: 0.5rem;
+}
+
+.ml1 {
+    margin-left: 0.5rem;
+}
+
+.ml2 {
+    margin-left: 1.5rem;
+}
+
+.mt1 {
+    margin-top: 1rem;
+}
+
+.shrink{
+    width: 80%;
+}
+
+h2 {
+    font-size: 30px;
+    color: darkgreen
+}
+

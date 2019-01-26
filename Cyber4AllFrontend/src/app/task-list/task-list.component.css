@@ -1,0 +1,63 @@
+.mb1{
+    margin-bottom: 1rem; 
+}
+
+.mr1 {
+    margin-right: 0.5rem;
+}
+
+.mr2 {
+    margin-right: 1.5rem;
+}
+
+.completed {
+    margin-left: 2.5rem;
+}
+
+.ml1 {
+    margin-left: 0.5rem;
+}
+
+.ml2 {
+    margin-left: 1.5rem;
+}
+
+.mt1 {
+    margin-top: 1rem;
+}
+
+.shrink{
+    width: 60%;
+}
+
+h2 {
+    font-size: 30px;
+    color: darkseagreen;
+}
+
+.addTaskCol {
+    color: palevioletred;
+}
+
+.taskParams {
+    display: flex;
+    justify-content: flex-start;
+    align-items: baseline;
+}
+
+.addTaskOptions {
+    display: flex;
+}
+
+.taskListOptions {
+    margin-top: 1rem;
+    align-content: center;
+    text-align: center;
+}
+
+.displayOrder {
+    margin-top: 1rem;
+    color: indianred;
+    align-content: center;
+    text-align: center;
+}

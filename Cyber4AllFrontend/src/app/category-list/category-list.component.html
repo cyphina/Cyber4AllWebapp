@@ -1,0 +1,42 @@
+<h2>Category Page</h2>
+<div>
+    <h3>Add a category</h3>
+    <label for="categoryName" class="ml1">Category Name:
+        <input class="nes-input mr1" #categoryName id="categoryName" />
+    </label>
+    <!-- (click) passes input value to add() and then clears the input -->
+    <button class="nes-button ml2" (click)="createCategory(categoryName.value); categoryName.value=''">
+        Add Category
+    </button>
+</div>
+<div>
+    <h3>Categories:</h3>
+    <div class="ml1">
+        <label>Task ids to add or delete (multiple can be seperated by commas)</label>
+        <input #taskToAddName class="nes-input shrink">
+    </div>
+</div>
+<div *ngFor="let cat of cats; let i = index" class="nes-container is-rounded">
+    <div class="nes-field mb1">
+        <label for="name_field{{i}}">Category Name:</label>
+        <input class="nes-input" id="name_field{{i}}" #catName [(ngModel)]="cat.name">
+    </div>
+    <div>
+        <button class="nes-btn mr1" title="View Tasks" (click)="selectCategory(cat)">View Tasks</button>
+        <button class="nes-btn is-error mr1" title="Delete Task" (click)="deleteCategory(cat)">Delete</button>
+        <button class="nes-btn is-success mr1" title="Rename Task" (click)="renameCategory(cat)">Rename</button>
+        <button class="nes-btn is-primary mr1" title="Add Task" (click)="addTaskToCat(cat, taskToAddName.value)">Add
+            Task</button>
+        <button class="nes-btn is-warning mr1" title="Remove Task" (click)="removeTaskFromCat(cat, taskToAddName.value)">Remove
+            Task</button>
+    </div>
+    <div *ngIf="selectedCat === cat" class="nes-container is-dark with-title mt1">
+        <p class="title">{{cat.name}} Tasks</p>
+        <ul class="tasks">
+            <li *ngFor="let task of selectedCatTasks">
+                {{task._id}} {{task.text}} {{task.completed}} {{task.date}}
+            </li>
+        </ul>
+        <button class="nes-btn is-error" title="Close Taskview" (click)="selectCategory({})">Close</button>
+    </div>
+</div>

@@ -1,0 +1,23 @@
+a {
+    margin-right: 1rem;
+}
+
+.MainNav {
+    padding: 5px 10px;
+    text-align: center;
+    font-size: 30px;
+}
+
+nav a {
+    color: #607D8B;
+    border-radius: 6px;
+    background-color: lightblue;
+}
+
+i {
+    vertical-align: middle
+}
+
+.mt1 {
+    margin-top: 1rem
+}

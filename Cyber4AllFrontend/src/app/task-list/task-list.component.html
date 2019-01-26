@@ -1,0 +1,59 @@
+<h2>Task Page</h2>
+<div class="nes-container with-title ml1">
+    <h3 class>Add a task</h3>
+    <div class="addTaskOptions addTaskCol">
+        <label class="addTaskCol">Task name:
+            <input class="nes-input mlr1" #taskName />
+        </label>
+        <label class=" addTaskCol completed"> Completed:
+            <div>
+                <input class="mr2" #taskCompleted type="checkbox">
+            </div>
+        </label>
+        <!-- (click) passes input value to add() and then clears the input -->
+    </div>
+    <button (click)="addTask(taskName.value, taskCompleted.checked); taskName.value=''; taskCompleted.checked=false">
+        Add
+    </button>
+</div>
+
+<div class="taskListOptions">
+    <h3>Tasks:</h3>
+    <h4>Sort Filter
+        <select #taskFilter>
+            <option *ngFor="let sortFilter of sortFilters" [value]="sortFilter" (click)='sortTasks(sortFilter)'>{{sortFilter}}</option>
+        </select>
+    </h4>
+
+    <div>
+        <label>
+            <input name="Ascending" class="ml2" type="radio" value="Ascending" [(ngModel)]="sortDirection" checked=""
+                (change)="sortTasks(taskFilter.value)">
+            Ascending
+        </label>
+    </div>
+    <div>
+        <label>
+            <input name="Descending" class="ml2" type="radio" value="Descending" [(ngModel)]="sortDirection" (change)="sortTasks(taskFilter.value)">
+            Descending
+        </label>
+    </div>
+</div>
+<div class = "displayOrder">
+    ID (container title) - Text - Completed - Date
+</div>
+<div *ngFor="let task of tasks" class="nes-container with-title">
+    <p class="title">{{task._id}}</p>
+    <div class="taskParams">
+        <input #taskName [(ngModel)]="task.text" class="nes-input shrink ml1">
+        <div style="align-self:center">
+            <input *ngIf="task.completed; else elseBlock" type="checkbox" class="ml1" checked (click)="completeTask(task, false)">
+            <ng-template #elseBlock><input type="checkbox" class="ml1" (click)="completeTask(task, true)"></ng-template>
+        {{task.date}}
+    </div>
+        <div style="margin-left: auto">
+            <button class="nes-btn is-error mr1" title="Delete Task" (click)="deleteTask(task)">Delete</button>
+            <button class="nes-btn is-success" title="Rename Task" (click)="renameTask(task)">Rename</button>
+        </div>
+    </div>
+</div>
